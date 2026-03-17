@@ -32,20 +32,20 @@ O projeto foi desenvolvido com foco em **experiência do usuário, arquitetura l
 
 ## 📸 Screenshots
 
-### 🏠 Feed
-![Feed](./screenshots/feed.png)
+### Feed
+![Feed](screenshots/feed.png)
 
-### 🔄 Feed (outra visualização)
-![Feed2](./screenshots/feed2.png)
+### Feed 2
+![Feed 2](screenshots/feed2.png)
 
-### 🔐 Login
-![Login](./screenshots/login.png)
+### Login
+![Login](screenshots/login.png)
 
-### 📝 Cadastro
-![Cadastro](./screenshots/cadastro.png)
+### Cadastro
+![Cadastro](screenshots/cadastro.png)
 
-### 👤 Perfil / Publicar oferta
-![Perfil](./screenshots/perfil.png)
+### Perfil
+![Perfil](screenshots/perfil.png)
 
 ---
 
