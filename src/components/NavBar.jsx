@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-function Navbar() {
+function Navbar({ usuarioLogado, onLogout }) {
   return (
     <div
       style={{
@@ -13,8 +13,6 @@ function Navbar() {
         color: "#ffffff"
       }}
     >
-
-      {/* Logo */}
       <h1
         style={{
           margin: 0,
@@ -26,27 +24,43 @@ function Navbar() {
         Offzy
       </h1>
 
-      {/* Links */}
-      <div style={{ display: "flex", gap: "20px" }}>
-
+      <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
         <Link to="/" style={{ color: "#ffffff", textDecoration: "none" }}>
           Feed
         </Link>
 
-        <Link to="/login" style={{ color: "#ffffff", textDecoration: "none" }}>
-          Login
-        </Link>
-
-        <Link to="/cadastro" style={{ color: "#ffffff", textDecoration: "none" }}>
-          Cadastro
-        </Link>
-
-        <Link to="/perfil" style={{ color: "#ffffff", textDecoration: "none" }}>
-          Perfil
-        </Link>
-
+        {usuarioLogado ? (
+          <>
+            <Link to="/perfil" style={{ color: "#ffffff", textDecoration: "none" }}>
+              Perfil
+            </Link>
+            <button
+              type="button"
+              onClick={onLogout}
+              style={{
+                padding: "8px 14px",
+                borderRadius: "8px",
+                border: "1px solid rgba(255,255,255,0.6)",
+                background: "transparent",
+                color: "#ffffff",
+                fontWeight: "600",
+                cursor: "pointer"
+              }}
+            >
+              Sair
+            </button>
+          </>
+        ) : (
+          <>
+            <Link to="/login" style={{ color: "#ffffff", textDecoration: "none" }}>
+              Login
+            </Link>
+            <Link to="/cadastro" style={{ color: "#ffffff", textDecoration: "none" }}>
+              Cadastro
+            </Link>
+          </>
+        )}
       </div>
-
     </div>
   );
 }

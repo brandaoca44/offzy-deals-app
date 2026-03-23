@@ -1,16 +1,6 @@
-import { useState } from "react";
-
-function OfertaCard({ oferta, usuarioLogado }) {
-  const [likes, setLikes] = useState(0);
-  const [dislikes, setDislikes] = useState(0);
-
-  function curtir() {
-    setLikes(likes + 1);
-  }
-
-  function naoCurtir() {
-    setDislikes(dislikes + 1);
-  }
+function OfertaCard({ oferta, usuarioLogado, onVotar }) {
+  const likes = oferta.likes ?? 0;
+  const dislikes = oferta.dislikes ?? 0;
 
   let desconto = null;
 
@@ -24,29 +14,29 @@ function OfertaCard({ oferta, usuarioLogado }) {
   }
 
   return (
-<div
-  style={{
-    background: "var(--card)",
-    border: "1px solid #d1d5db",
-    borderRadius: "12px",
-    padding: "16px",
-    marginBottom: "16px",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
-    width: "100%"
-  }}
->
+    <div
+      style={{
+        background: "var(--card)",
+        border: "1px solid #d1d5db",
+        borderRadius: "12px",
+        padding: "16px",
+        marginBottom: "16px",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+        width: "100%"
+      }}
+    >
       <img
-  src={oferta.imagem || "https://via.placeholder.com/500x250"}
-  alt={oferta.titulo}
-  style={{
-    width: "100%",
-    height: "220px",
-    objectFit: "cover",
-    borderRadius: "10px",
-    marginBottom: "12px",
-    display: "block"
-  }}
-/>
+        src={oferta.imagem || "https://via.placeholder.com/500x250"}
+        alt={oferta.titulo}
+        style={{
+          width: "100%",
+          height: "220px",
+          objectFit: "cover",
+          borderRadius: "10px",
+          marginBottom: "12px",
+          display: "block"
+        }}
+      />
 
       <h3
         style={{
@@ -89,7 +79,7 @@ function OfertaCard({ oferta, usuarioLogado }) {
           </span>
         )}
 
-        {desconto && (
+        {desconto ? (
           <span
             style={{
               fontSize: "12px",
@@ -102,7 +92,7 @@ function OfertaCard({ oferta, usuarioLogado }) {
           >
             -{desconto}%
           </span>
-        )}
+        ) : null}
       </div>
 
       <p
@@ -117,7 +107,7 @@ function OfertaCard({ oferta, usuarioLogado }) {
       <a
         href={usuarioLogado ? oferta.link : "/login"}
         target={usuarioLogado ? "_blank" : "_self"}
-        rel="noreferrer"
+        rel={usuarioLogado ? "noopener noreferrer" : undefined}
         style={{
           display: "inline-block",
           padding: "8px 14px",
@@ -140,7 +130,8 @@ function OfertaCard({ oferta, usuarioLogado }) {
         }}
       >
         <button
-          onClick={curtir}
+          type="button"
+          onClick={() => onVotar(oferta.id, "like")}
           style={{
             padding: "5px 10px",
             borderRadius: "999px",
@@ -153,7 +144,8 @@ function OfertaCard({ oferta, usuarioLogado }) {
         </button>
 
         <button
-          onClick={naoCurtir}
+          type="button"
+          onClick={() => onVotar(oferta.id, "dislike")}
           style={{
             padding: "5px 10px",
             borderRadius: "999px",
@@ -166,6 +158,7 @@ function OfertaCard({ oferta, usuarioLogado }) {
         </button>
 
         <button
+          type="button"
           style={{
             padding: "5px 10px",
             borderRadius: "999px",

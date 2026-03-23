@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { isSafePublicHttpsUrl } from "../utils/urls";
+
 function NovaOferta({ adicionarOferta }) {
   const [form, setForm] = useState({
     titulo: "",
@@ -10,9 +12,11 @@ function NovaOferta({ adicionarOferta }) {
     link: "",
     imagem: ""
   });
+  const [erro, setErro] = useState("");
 
   function atualizarCampo(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
+    if (erro) setErro("");
   }
 
   function publicarOferta(e) {
@@ -25,7 +29,17 @@ function NovaOferta({ adicionarOferta }) {
       !form.categoria ||
       !form.link
     ) {
-      alert("Preencha os campos obrigatórios.");
+      setErro("Preencha os campos obrigatórios.");
+      return;
+    }
+
+    if (!isSafePublicHttpsUrl(form.link)) {
+      setErro("O link da oferta deve ser uma URL https válida (sem usuário/senha na URL).");
+      return;
+    }
+
+    if (form.imagem.trim() && !isSafePublicHttpsUrl(form.imagem)) {
+      setErro("A imagem, se informada, deve ser uma URL https válida.");
       return;
     }
 
@@ -40,7 +54,7 @@ function NovaOferta({ adicionarOferta }) {
       link: "",
       imagem: ""
     });
-
+    setErro("");
     alert("Oferta publicada com sucesso.");
   }
 
@@ -53,6 +67,23 @@ function NovaOferta({ adicionarOferta }) {
         gap: "16px"
       }}
     >
+      {erro ? (
+        <p
+          role="alert"
+          style={{
+            margin: 0,
+            padding: "12px",
+            borderRadius: "8px",
+            background: "#fef2f2",
+            color: "#b91c1c",
+            fontSize: "14px",
+            border: "1px solid #fecaca"
+          }}
+        >
+          {erro}
+        </p>
+      ) : null}
+
       <div>
         <label
           style={{
@@ -189,13 +220,14 @@ function NovaOferta({ adicionarOferta }) {
             color: "var(--text)"
           }}
         >
-          Link da oferta
+          Link da oferta (https)
         </label>
 
         <input
           name="link"
-          type="text"
-          placeholder="Cole aqui o link do produto"
+          type="url"
+          inputMode="url"
+          placeholder="https://..."
           value={form.link}
           onChange={atualizarCampo}
         />
@@ -211,13 +243,14 @@ function NovaOferta({ adicionarOferta }) {
             color: "var(--text)"
           }}
         >
-          Imagem do produto
+          Imagem do produto (https, opcional)
         </label>
 
         <input
           name="imagem"
-          type="text"
-          placeholder="Cole a URL da imagem"
+          type="url"
+          inputMode="url"
+          placeholder="https://..."
           value={form.imagem}
           onChange={atualizarCampo}
         />

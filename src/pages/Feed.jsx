@@ -1,10 +1,9 @@
 import { useState } from "react";
-import InfiniteScroll from "react-infinite-scroll-component";
 
 import OfertaCard from "../components/OfertaCard";
 import Categorias from "../components/Categorias";
 
-function Feed({ usuarioLogado, ofertas }) {
+function Feed({ usuarioLogado, ofertas, onVotar }) {
   const [categoria, setCategoria] = useState("Todas");
   const [busca, setBusca] = useState("");
 
@@ -73,20 +72,16 @@ function Feed({ usuarioLogado, ofertas }) {
           />
         </div>
 
-        <InfiniteScroll
-          dataLength={ofertasOrdenadas.length}
-          next={() => {}}
-          hasMore={true}
-          loader={<h4>Carregando ofertas...</h4>}
-        >
+        <div>
           {ofertasOrdenadas.map((oferta) => (
             <OfertaCard
               key={oferta.id}
               oferta={oferta}
               usuarioLogado={usuarioLogado}
+              onVotar={onVotar}
             />
           ))}
-        </InfiniteScroll>
+        </div>
       </div>
 
       <div
