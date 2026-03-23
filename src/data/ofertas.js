@@ -6,7 +6,8 @@ export const ofertas = [
     precoAntigo: "R$79",
     loja: "Shopee",
     categoria: "Tecnologia",
-    imagem: "https://via.placeholder.com/500x250",
+    imagem:
+      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&h=400&q=80",
     link: "https://shopee.com"
   },
   {
@@ -16,7 +17,8 @@ export const ofertas = [
     precoAntigo: "R$399",
     loja: "Mercado Livre",
     categoria: "Tecnologia",
-    imagem: "https://via.placeholder.com/500x250",
+    imagem:
+      "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?auto=format&fit=crop&w=800&h=400&q=80",
     link: "https://mercadolivre.com"
   },
   {
@@ -26,7 +28,8 @@ export const ofertas = [
     precoAntigo: "R$349",
     loja: "Amazon",
     categoria: "Casa",
-    imagem: "https://via.placeholder.com/500x250",
+    imagem:
+      "https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=800&h=400&q=80",
     link: "https://amazon.com"
   }
 ];
