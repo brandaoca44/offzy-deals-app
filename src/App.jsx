@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 import Feed from "./pages/Feed";
 import Login from "./pages/Login";
@@ -108,54 +109,60 @@ function App() {
         style={{
           background: "var(--background)",
           color: "var(--text)",
-          minHeight: "100vh"
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column"
         }}
       >
         <Navbar usuarioLogado={usuarioLogado} onLogout={encerrarSessao} />
 
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <Feed
-                usuarioLogado={usuarioLogado}
-                ofertas={ofertas}
-                onVotar={registrarVoto}
-              />
-            }
-          />
+        <div style={{ flex: 1 }}>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <Feed
+                  usuarioLogado={usuarioLogado}
+                  ofertas={ofertas}
+                  onVotar={registrarVoto}
+                />
+              }
+            />
 
-          <Route
-            path="/login"
-            element={
-              <Login
-                setUsuarioLogado={setUsuarioLogado}
-                jaLogado={usuarioLogado}
-              />
-            }
-          />
+            <Route
+              path="/login"
+              element={
+                <Login
+                  setUsuarioLogado={setUsuarioLogado}
+                  jaLogado={usuarioLogado}
+                />
+              }
+            />
 
-          <Route
-            path="/cadastro"
-            element={
-              <Cadastro
-                setUsuarioLogado={setUsuarioLogado}
-                jaLogado={usuarioLogado}
-              />
-            }
-          />
+            <Route
+              path="/cadastro"
+              element={
+                <Cadastro
+                  setUsuarioLogado={setUsuarioLogado}
+                  jaLogado={usuarioLogado}
+                />
+              }
+            />
 
-          <Route
-            path="/perfil"
-            element={
-              usuarioLogado ? (
-                <Perfil adicionarOferta={adicionarOferta} />
-              ) : (
-                <Navigate to="/login" replace />
-              )
-            }
-          />
-        </Routes>
+            <Route
+              path="/perfil"
+              element={
+                usuarioLogado ? (
+                  <Perfil adicionarOferta={adicionarOferta} />
+                ) : (
+                  <Navigate to="/login" replace />
+                )
+              }
+            />
+          </Routes>
+        </div>
+
+        <Footer />
       </div>
     </BrowserRouter>
   );

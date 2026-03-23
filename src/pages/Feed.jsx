@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import OfertaCard from "../components/OfertaCard";
 import Categorias from "../components/Categorias";
@@ -6,22 +6,57 @@ import Categorias from "../components/Categorias";
 function Feed({ usuarioLogado, ofertas, onVotar }) {
   const [categoria, setCategoria] = useState("Todas");
   const [busca, setBusca] = useState("");
+  const [limite, setLimite] = useState(6);
+  const [carregandoMais, setCarregandoMais] = useState(false);
+  const sentinelRef = useRef(null);
 
   function selecionarCategoria(cat) {
     setCategoria(cat);
   }
 
-  const ofertasFiltradas = ofertas
-    .filter((o) => categoria === "Todas" || o.categoria === categoria)
-    .filter((o) =>
-      o.titulo.toLowerCase().includes(busca.toLowerCase())
+  useEffect(() => {
+    setLimite(6);
+    setCarregandoMais(false);
+  }, [categoria, busca]);
+
+  const ofertasOrdenadas = useMemo(() => {
+    const ofertasFiltradas = (Array.isArray(ofertas) ? ofertas : [])
+      .filter((o) => categoria === "Todas" || o.categoria === categoria)
+      .filter((o) => (o.titulo || "").toLowerCase().includes(busca.toLowerCase()));
+
+    return ofertasFiltradas.sort((a, b) => {
+      const scoreA = (a.likes || 0) - (a.dislikes || 0);
+      const scoreB = (b.likes || 0) - (b.dislikes || 0);
+      return scoreB - scoreA;
+    });
+  }, [ofertas, categoria, busca]);
+
+  const ofertasVisiveis = ofertasOrdenadas.slice(0, limite);
+  const hasMore = limite < ofertasOrdenadas.length;
+
+  useEffect(() => {
+    if (!hasMore) return;
+    if (typeof IntersectionObserver === "undefined") return;
+
+    const el = sentinelRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries?.length) return;
+        if (!entries[0].isIntersecting) return;
+        if (carregandoMais) return;
+
+        setCarregandoMais(true);
+        setLimite((prev) => Math.min(prev + 6, ofertasOrdenadas.length));
+        setTimeout(() => setCarregandoMais(false), 250);
+      },
+      { root: null, rootMargin: "200px 0px", threshold: 0 }
     );
 
-  const ofertasOrdenadas = [...ofertasFiltradas].sort((a, b) => {
-    const scoreA = (a.likes || 0) - (a.dislikes || 0);
-    const scoreB = (b.likes || 0) - (b.dislikes || 0);
-    return scoreB - scoreA;
-  });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [hasMore, carregandoMais, ofertasOrdenadas.length]);
 
   return (
     <div
@@ -73,7 +108,7 @@ function Feed({ usuarioLogado, ofertas, onVotar }) {
         </div>
 
         <div>
-          {ofertasOrdenadas.map((oferta) => (
+          {ofertasVisiveis.map((oferta) => (
             <OfertaCard
               key={oferta.id}
               oferta={oferta}
@@ -81,6 +116,15 @@ function Feed({ usuarioLogado, ofertas, onVotar }) {
               onVotar={onVotar}
             />
           ))}
+
+          {/* Sentinel para disparar "load more" quando o usuário chega no fim */}
+          <div ref={sentinelRef} />
+
+          {carregandoMais ? (
+            <h4 style={{ margin: "12px 0 0 0", color: "var(--text)" }}>
+              Carregando ofertas...
+            </h4>
+          ) : null}
         </div>
       </div>
 

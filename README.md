@@ -48,7 +48,15 @@ Se você alterar o seed em `src/data/ofertas.js` e não vir mudanças, limpe ess
 
 ## Screenshots
 
-Coloque capturas em `screenshots/` (por exemplo `feed.png`) e descomente ou adicione referências em Markdown aqui. A pasta não é obrigatória para rodar o projeto.
+### Feed
+![Feed](screenshots/feed.png)
+
+### Login
+![Login](screenshots/login.png)git
+
+### Cadastro
+![Cadastro](screenshots/cadastro.png)
+
 
 ---
 
